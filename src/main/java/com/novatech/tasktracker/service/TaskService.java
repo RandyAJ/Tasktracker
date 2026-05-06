@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import com.novatech.tasktracker.repository.TaskRepository;
 import com.novatech.tasktracker.entity.Task;
 
+import java.util.List;
+
 @Service
 public class TaskService {
 
@@ -14,7 +16,7 @@ public class TaskService {
         this.taskRepository = taskRepository;
     }
 
-    public Task createTask(String title){
+    public Task create(String title){
         Task task = new Task();
         task.setTitle(title);
 
@@ -27,7 +29,7 @@ public class TaskService {
         }
 
         return taskRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException(String.format("Task with id %d not found", id)));
+                .orElseThrow(() -> new IllegalArgumentException(String.format("Task c ID %d не найдена", id)));
     }
 
     public Task updateStatus(Long id, TaskStatus status){
@@ -37,7 +39,11 @@ public class TaskService {
         return taskRepository.save(task);
     }
 
-    public void deleteTask(Long id){
+    public void delete(Long id){
         taskRepository.deleteById(id);
+    }
+
+    public List<Task> listByStatus(TaskStatus status){
+        return taskRepository.findAllByStatus(status);
     }
 }
