@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.AssertTrue;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
@@ -16,12 +17,14 @@ public class Task {
     private Long id;
 
     @NotNull // на уровне кода до сэйва
+    @Setter
     private String title;
 
     private String description;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false) // на уровне БД потому что задаю пресейвом
+    @Setter
     private TaskStatus status;
 
     @Column(nullable = false)
