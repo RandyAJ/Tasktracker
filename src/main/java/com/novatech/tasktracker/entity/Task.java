@@ -20,6 +20,7 @@ public class Task {
     @Setter
     private String title;
 
+    @Setter
     private String description;
 
     @Enumerated(EnumType.STRING)
@@ -30,7 +31,10 @@ public class Task {
     @Column(nullable = false)
     private LocalDateTime dateCreated;
 
+    @Setter
     private LocalDateTime dateDeadline;
+
+    /**/
 
     @PrePersist
     protected void onCreate() {
