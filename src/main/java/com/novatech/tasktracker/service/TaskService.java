@@ -1,7 +1,9 @@
 package com.novatech.tasktracker.service;
 
+import com.novatech.tasktracker.dto.TaskResponse;
 import com.novatech.tasktracker.dto.UpdateTaskRequest;
 import com.novatech.tasktracker.entity.TaskStatus;
+import com.novatech.tasktracker.mapper.TaskMapper;
 import org.springframework.stereotype.Service;
 import com.novatech.tasktracker.repository.TaskRepository;
 import com.novatech.tasktracker.entity.Task;
@@ -12,29 +14,35 @@ import java.util.List;
 public class TaskService {
 
     private final TaskRepository taskRepository;
+    private final TaskMapper taskMapper;
 
-    public TaskService(TaskRepository taskRepository) {
+    public TaskService(TaskRepository taskRepository, TaskMapper taskMapper) {
         this.taskRepository = taskRepository;
+        this.taskMapper = taskMapper;
     }
 
-    public Task create(String title){
-        Task task = new Task();
-        task.setTitle(title);
-
-        return taskRepository.save(task);
-    }
-
-    public Task get(Long id){
-        if (id == null) {
-            throw new IllegalArgumentException("ID при поиске Task не может быть null");
-        }
-
+    private Task getEntity(Long id){
         return taskRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(String.format("Task c ID %d не найдена", id)));
     }
 
-    public Task update(Long id, UpdateTaskRequest request){
-        Task task = this.get(id);
+    public TaskResponse get(Long id){
+        if (id == null) {
+            throw new IllegalArgumentException("ID при поиске Task не может быть null");
+        }
+
+        return taskMapper.toResponse(getEntity(id));
+    }
+
+    public TaskResponse create(String title){
+        Task task = new Task();
+        task.setTitle(title);
+
+        return taskMapper.toResponse(taskRepository.save(task));
+    }
+
+    public TaskResponse update(Long id, UpdateTaskRequest request){
+        Task task = getEntity(id);
 
         if(request.title() != null){
             task.setTitle(request.title());
@@ -51,17 +59,19 @@ public class TaskService {
             task.setDateDeadline(request.dateDeadline());
         }
 
-        return taskRepository.save(task);
+        return taskMapper.toResponse(taskRepository.save(task));
     }
 
-    public Task updateStatus(Long id, TaskStatus status){
-        Task task = this.get(id);
+    public TaskResponse updateStatus(Long id, TaskStatus status){
+        Task task = getEntity(id);
+
         task.setStatus(status);
 
-        return taskRepository.save(task);
+        return taskMapper.toResponse(taskRepository.save(task));
     }
 
     public void delete(Long id){
+        getEntity(id);
         taskRepository.deleteById(id);
     }
 

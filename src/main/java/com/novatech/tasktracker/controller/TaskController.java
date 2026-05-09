@@ -5,6 +5,7 @@ import com.novatech.tasktracker.entity.TaskStatus;
 import com.novatech.tasktracker.service.TaskService;
 import com.novatech.tasktracker.dto.CreateTaskRequest;
 import com.novatech.tasktracker.dto.UpdateTaskRequest;
+import com.novatech.tasktracker.dto.TaskResponse;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -19,23 +20,17 @@ public class TaskController {
     }
 
     @GetMapping("/{id}")
-    public Task get(@PathVariable Long id) {
+    public TaskResponse get(@PathVariable Long id) {
         return taskService.get(id);
     }
 
     @PostMapping
-    public Task create(@RequestBody CreateTaskRequest request) {
+    public TaskResponse create(@RequestBody CreateTaskRequest request) {
         return taskService.create(request.title());
     }
 
-    /*@PutMapping("/{id}")
-    public Task update(@PathVariable Long id,
-                       @RequestBody UpdateTaskRequest request) {
-        return taskService.updateStatus(id, request.status()); // переделать на update всего объекта
-    }*/
-
     @PatchMapping("/{id}")
-    public Task update(@PathVariable Long id,
+    public TaskResponse update(@PathVariable Long id,
                        @RequestBody UpdateTaskRequest request) {
         return taskService.update(id, request); // переделать на update всего объекта
     }

@@ -3,6 +3,7 @@ package com.novatech.tasktracker.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.AssertTrue;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "task")
 @NoArgsConstructor
+@Getter
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE) // ID генерируется до Insert в БД, можно использовать пакетную вставку (batching)
